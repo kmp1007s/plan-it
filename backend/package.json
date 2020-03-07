@@ -5,17 +5,19 @@
   "license": "MIT",
   "dependencies": {
     "@koa/cors": "2",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^8.0.8",
+    "mongoose": "^5.9.3",
     "web-push": "^3.4.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
   },
   "scripts": {
-    "start": "node src",
-    "start:dev": "nodemon --watch src/ src/index.js"
+    "start": "cross-env NODE_PATH=src node src",
+    "start:dev": "cross-env NODE_PATH=src nodemon --watch src/ src/index.js"
   }
 }

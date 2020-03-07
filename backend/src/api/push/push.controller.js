@@ -1,6 +1,6 @@
 require("dotenv").config();
-
 const webpush = require("web-push");
+const Subscription = require("models/subscription");
 
 exports.vapidPublicKey = ctx => {
   console.log("[vapidPublicKey]");
@@ -8,17 +8,33 @@ exports.vapidPublicKey = ctx => {
 };
 
 exports.register = ctx => {
-  console.log("[register]");
+  console.log("[register]", ctx.request.body);
+  /* TODO: store the subscription */
+
+  // // subscription 인스턴스 생성
+  // const subscription = new Subscription({
+  //   subscription,
+  //   keys
+  // });
+
+  // try {
+  //   await subscription.save();
+
+  // } catch(ex) {
+  //   console.error(ex);
+  //   return ctx.throw(500, ex);
+  // }
+
   ctx.response.status = 201;
 };
 
-exports.sendNotification = ctx => {
-  console.log("[sendNotification]");
+exports.sendNotification = async ctx => {
+  console.log("[sendNotification]", ctx.request.body);
 
-  const reqBody = ctx.request.body;
+  const requestBody = ctx.request.body;
 
-  const subscription = reqBody.subscription;
-  const payload = reqBody.payload;
+  const subscription = requestBody.subscription;
+  const payload = requestBody.payload;
   const options = {
     TTL: 24 * 60 * 60,
     vapidDetails: {
@@ -28,13 +44,18 @@ exports.sendNotification = ctx => {
     }
   };
 
-  webpush
-    .sendNotification(subscription, payload, options)
-    .then(() => {
-      ctx.response.status = 201;
-    })
-    .catch(ex => {
-      console.log(ex);
-      ctx.response.status = 500;
-    });
+  // then 방식에서는 sendNotification을 수행하고 먼저 response를 보내는 것으로 보임 404 에러가 뜸
+  // await 키워드로 기다린 다음에 status를 보냄
+  await webpush.sendNotification(subscription, payload, options);
+  ctx.response.status = 201;
+
+  // webpush
+  //   .sendNotification(subscription, payload, options)
+  //   .then(() => {
+  //     ctx.response.status = 201;
+  //   })
+  //   .catch(ex => {
+  //     console.log(ex);
+  //     ctx.response.status = 500;
+  //   });
 };
