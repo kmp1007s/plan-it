@@ -7,6 +7,7 @@ const cors = require("@koa/cors");
 const pushLib = require("./lib/push");
 const mongoose = require("mongoose");
 const api = require("./api");
+const { jwtMiddleware } = require("lib/token");
 
 const app = new Koa();
 const router = new Router();
@@ -29,8 +30,9 @@ mongoose
 router.use("/api", api.routes()); // api 라우트를 /api 하위 경로로 설정
 
 app
-  .use(cors())
+  .use(cors({ origin: false, credentials: true }))
   .use(bodyParser()) // bodyParser는 라우터 코드보다 상단에 위치
+  .use(jwtMiddleware)
   .use(router.routes())
   .use(router.allowedMethods());
 

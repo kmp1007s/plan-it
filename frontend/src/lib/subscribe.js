@@ -44,7 +44,7 @@ async function getVAPIDPublicKey() {
  * @param {ServiceWorkerRegistration} registration
  */
 async function subscribe(registration) {
-  const applicationServerKey = getVAPIDPublicKey();
+  const applicationServerKey = await getVAPIDPublicKey();
 
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,

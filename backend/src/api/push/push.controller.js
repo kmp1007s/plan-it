@@ -29,11 +29,18 @@ exports.register = ctx => {
 };
 
 exports.sendNotification = async ctx => {
-  console.log("[sendNotification]", ctx.request.body);
+  const { user } = ctx.request;
+
+  if (!user) {
+    ctx.status = 403; // Forbidden
+    return;
+  }
+
+  console.log("[sendNotification]");
 
   const requestBody = ctx.request.body;
 
-  const subscription = requestBody.subscription;
+  const subscription = user.subscription;
   const payload = requestBody.payload;
   const options = {
     TTL: 24 * 60 * 60,
