@@ -28,7 +28,6 @@ function decodeToken(token) {
 
 async function jwtMiddleware(ctx, next) {
   const token = ctx.cookies.get("access_token");
-  console.log("token", token);
   if (!token) return next();
 
   try {

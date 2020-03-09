@@ -17,13 +17,18 @@ const log = msg => {
   console.log(`[ServiceWorker] ${msg}`);
 };
 
+self.addEventListener("notificationclick", function(event) {
+  event.notification.close();
+  clients.openWindow("localhost:3000");
+});
+
 self.addEventListener("push", function(event) {
   console.log("[Service Worker] Push Received.");
   console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
 
   const payload = event.data ? event.data.text() : "no payload";
   event.waitUntil(
-    self.registration.showNotification("ServiceWorker Cookbook", {
+    self.registration.showNotification("PlanNET[플랜잇]", {
       body: payload
     })
   );

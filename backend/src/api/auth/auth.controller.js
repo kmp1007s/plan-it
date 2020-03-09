@@ -117,7 +117,6 @@ exports.login = async ctx => {
 
   try {
     token = await account.generateToken(subscription);
-    console.log(token);
   } catch (e) {
     ctx.throw(500, e);
   }

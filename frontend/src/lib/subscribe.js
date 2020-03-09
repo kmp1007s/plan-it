@@ -75,7 +75,6 @@ async function updateSubscriptionOnServer(subscription) {
 }
 
 export default {
-  urlBase64ToUint8Array,
   subscribe,
   updateSubscriptionOnServer,
   isServiceWokrerSupported,

@@ -12,8 +12,7 @@ function isProperRequest(data, schema) {
 }
 
 function respondBadRequest(ctx, message) {
-  ctx.status = 400;
-  ctx.body = message;
+  ctx.throw(400, message.name);
 }
 
 module.exports = {

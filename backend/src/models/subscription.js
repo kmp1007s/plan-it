@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const Subscription = new Schema({
   endpoint: String,
   keys: Schema.Types.Mixed,
-  createDate: {
+  createdAt: {
     type: Date,
     default: Date.now
   }
