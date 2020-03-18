@@ -30,7 +30,7 @@ mongoose
 router.use("/api", api.routes()); // api 라우트를 /api 하위 경로로 설정
 
 app
-  .use(cors({ origin: false, credentials: true }))
+  .use(cors({ origin: false, credentials: true })) // 자격증명 true
   .use(bodyParser()) // bodyParser는 라우터 코드보다 상단에 위치
   .use(jwtMiddleware)
   .use(router.routes())

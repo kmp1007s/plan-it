@@ -47,6 +47,9 @@ Account.methods.validatePassword = function(pwd) {
   return this.pwd === hashed;
 };
 
+/**
+ * 계정정보로 토큰 생성
+ */
 Account.methods.generateToken = function(subscription) {
   const payload = {
     _id: this._id,

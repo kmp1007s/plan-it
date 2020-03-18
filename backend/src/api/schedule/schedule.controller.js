@@ -1,12 +1,15 @@
 const Joi = require("joi");
 const Schedule = require("models/schedule");
-const Validate = require("lib/validate");
 const Timer = require("lib/timer");
 
+/**
+ * 스케쥴 리스트 가져오기
+ */
 exports.list = async ctx => {
   const { user } = ctx.request;
 
   if (!user) {
+    console.log("No Decoded User");
     ctx.status = 403;
     return;
   }
@@ -20,11 +23,10 @@ exports.list = async ctx => {
 
   ctx.body = schedules;
 
-  if (schedules.length) {
-    Timer.clearAllTimers();
+  console.log("schedule length: ", schedules.length);
+  if (!schedules.length) {
+    await Timer.clearAllTimers();
     for (let schedule of schedules) {
-      console.log(schedule);
-
       const triggerTime = schedule.startTime.split(":");
       Timer.pushTimer(
         triggerTime[0],
@@ -33,10 +35,15 @@ exports.list = async ctx => {
         schedule.schedule
       );
     }
+    console.log("Register Timer Length: ", timerIdsLength());
   } else console.log("No Schedule");
 };
 
+/**
+ * 스케쥴을 DB에 새로 저장
+ */
 exports.create = async ctx => {
+  console.log("create Schedule");
   const { user } = ctx.request;
 
   if (!user) {
@@ -51,11 +58,8 @@ exports.create = async ctx => {
     schedule: Joi.string().required()
   });
 
-  const error = Validate.isProperRequest(ctx.request.body, schema);
-  if (error) {
-    Validate.respondBadRequest(ctx, error);
-    return;
-  }
+  const result = Joi.validate(ctx.request.body, schema);
+  if (result.error) return ctx.throw(400, error);
 
   const scheduleInfo = {
     date: ctx.request.body.date,
@@ -83,10 +87,8 @@ exports.create = async ctx => {
   }
 
   if (schedules.length) {
-    Timer.clearAllTimers();
+    await Timer.clearAllTimers();
     for (let schedule of schedules) {
-      console.log(schedule);
-
       const triggerTime = schedule.startTime.split(":");
       Timer.pushTimer(
         triggerTime[0],
@@ -95,5 +97,6 @@ exports.create = async ctx => {
         schedule.schedule
       );
     }
+    console.log("Register Timer Length: ", timerIdsLength());
   } else console.log("No Schedule");
 };

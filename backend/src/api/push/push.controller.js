@@ -1,33 +1,23 @@
-require("dotenv").config();
 const webpush = require("web-push");
-const Subscription = require("models/subscription");
 
+/**
+ * 공개키 가져오기
+ */
 exports.vapidPublicKey = ctx => {
   console.log("[vapidPublicKey]");
   ctx.body = process.env.VAPID_PUBLIC_KEY;
 };
 
+/**
+ * 공개키를 서버측에서 저장 (이 앱에는 불필요)
+ */
 exports.register = ctx => {
-  console.log("[register]", ctx.request.body);
   /* TODO: store the subscription */
-
-  // // subscription 인스턴스 생성
-  // const subscription = new Subscription({
-  //   subscription,
-  //   keys
-  // });
-
-  // try {
-  //   await subscription.save();
-
-  // } catch(ex) {
-  //   console.error(ex);
-  //   return ctx.throw(500, ex);
-  // }
-
-  ctx.response.status = 201;
 };
 
+/**
+ * Push Notification 테스트용
+ */
 exports.sendNotification = async ctx => {
   const { user } = ctx.request;
 

@@ -43,6 +43,6 @@ self.addEventListener("activate", function(e) {
   log("ACTIVATE");
 });
 
-self.addEventListener("fetch", function(e) {
-  log("Fetch " + e.request.url);
-});
+// self.addEventListener("fetch", function(e) {
+//   log("Fetch " + e.request.url);
+// });

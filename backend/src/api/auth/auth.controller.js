@@ -1,6 +1,5 @@
 const Joi = require("joi");
 const Account = require("models/account");
-const Validate = require("lib/validate");
 
 /**
  * 회원가입
@@ -17,11 +16,8 @@ exports.register = async ctx => {
       .min(6)
   });
 
-  const error = Validate.isProperRequest(ctx.request.body, schema);
-  if (error) {
-    Validate.respondBadRequest(ctx, error);
-    return;
-  }
+  const result = Joi.validate(ctx.request.body, schema);
+  if (result.error) return ctx.throw(400, error);
 
   let exisiting = null;
 
@@ -60,11 +56,8 @@ exports.exists = async ctx => {
     .max(15)
     .required();
 
-  const error = Validate.isProperRequest(userId, schema);
-  if (error) {
-    Validate.respondBadRequest(ctx, error);
-    return;
-  }
+  const result = Joi.validate(ctx.request.body, schema);
+  if (result.error) return ctx.throw(400, error);
 
   let account = null;
 
@@ -95,11 +88,8 @@ exports.login = async ctx => {
     subscription: Joi.object().required()
   });
 
-  const error = Validate.isProperRequest(ctx.request.body, schema);
-  if (error) {
-    Validate.respondBadRequest(ctx, error);
-    return;
-  }
+  const result = Joi.validate(ctx.request.body, schema);
+  if (result.error) return ctx.throw(400, error);
 
   const { userId, pwd, subscription } = ctx.request.body;
 
@@ -121,7 +111,7 @@ exports.login = async ctx => {
     ctx.throw(500, e);
   }
 
-  // httpOnly 속성을 통해 네트워크 요청 시에만 붙도록 함
+  // httpOnly 속성을 통해 네트워크 요청 시에 붙도록 함
   ctx.cookies.set("access_token", token, {
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 7,
@@ -144,7 +134,7 @@ exports.logout = ctx => {
 /**
  * 토큰 체크
  */
-exports.check = ctx => {
+exports.check = async ctx => {
   const { user } = ctx.request;
 
   if (!user) {
@@ -152,5 +142,17 @@ exports.check = ctx => {
     return;
   }
 
-  ctx.body = user;
+  const { userId } = user;
+
+  let account = null;
+
+  try {
+    account = await Account.findByUserId(userId);
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+
+  if (!account) return (ctx.status = 403);
+
+  ctx.body = userId;
 };

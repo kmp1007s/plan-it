@@ -2,13 +2,18 @@
  * 브라우저가 ServiceWorker와 PushManager를 지원하는 지 확인
  */
 function isServiceWokrerSupported() {
-  if ("serviceWorker" in navigator && "PushManager" in window) {
-    console.log("ServiceWorker Support");
-    return true;
-  } else {
-    console.log("Not ServiceWorker Support");
-    return false;
-  }
+  if ("serviceWorker" in navigator && "PushManager" in window) return true;
+  else return false;
+}
+
+/**
+ * Notification 권한 요청
+ */
+async function askPermission() {
+  const permission = await Notification.requestPermission();
+
+  if (permission !== "granted") return false;
+  return true;
 }
 
 /**
@@ -74,9 +79,21 @@ async function updateSubscriptionOnServer(subscription) {
   } else console.error("No Subscription Send To Server");
 }
 
+/**
+ * ServiceWorker를 register한다
+ * @param {String} swUrl
+ */
+async function registerSW(swUrl) {
+  const registration = await navigator.serviceWorker.register(swUrl);
+  await navigator.serviceWorker.ready; // serviceworker를 등록하고 active 단계가 될 때까지 실행을 기다림
+  return registration;
+}
+
 export default {
   subscribe,
   updateSubscriptionOnServer,
   isServiceWokrerSupported,
-  getVAPIDPublicKey
+  getVAPIDPublicKey,
+  askPermission,
+  registerSW
 };

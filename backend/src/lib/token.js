@@ -1,6 +1,10 @@
 const jwtSecret = process.env.JWT_SECRET_KEY;
 const jwt = require("jsonwebtoken");
 
+/**
+ * 토큰 생성
+ * @param {Object} payload
+ */
 function generateToken(payload) {
   return new Promise((resolve, reject) => {
     jwt.sign(
@@ -17,6 +21,10 @@ function generateToken(payload) {
   });
 }
 
+/**
+ * 토큰 해석
+ * @param {Object} token
+ */
 function decodeToken(token) {
   return new Promise((resolve, reject) => {
     jwt.verify(token, jwtSecret, (error, decoded) => {
@@ -26,9 +34,18 @@ function decodeToken(token) {
   });
 }
 
+/**
+ * jwt를 미들웨어 기반 처리
+ * @param {*} ctx
+ * @param {*} next
+ */
 async function jwtMiddleware(ctx, next) {
   const token = ctx.cookies.get("access_token");
-  if (!token) return next();
+
+  if (!token) {
+    console.log("No Token To Validate");
+    return next();
+  }
 
   try {
     const decoded = await decodeToken(token);
