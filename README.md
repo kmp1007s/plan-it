@@ -3,7 +3,7 @@
 **ServiceWorker**와 **PWA의 Push Notification**을 이용한 **웹플래너**
 
 # FrontEnd-React
-## (Modules I used)
+* (Modules I used)
 * redux
 * redux-actions
 * shards-react
@@ -11,7 +11,7 @@
 * react-loading
 
 # BackEnd-Koa
-## (Modules I used)
+* (Modules I used)
 * joi
 * jsonwebtoken
 * koa-bodyparser
