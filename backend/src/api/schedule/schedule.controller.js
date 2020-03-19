@@ -24,7 +24,7 @@ exports.list = async ctx => {
   ctx.body = schedules;
 
   console.log("schedule length: ", schedules.length);
-  if (!schedules.length) {
+  if (schedules.length) {
     await Timer.clearAllTimers();
     for (let schedule of schedules) {
       const triggerTime = schedule.startTime.split(":");
@@ -35,7 +35,7 @@ exports.list = async ctx => {
         schedule.schedule
       );
     }
-    console.log("Register Timer Length: ", timerIdsLength());
+    console.log("Register Timer Length: ", Timer.timerIdsLength());
   } else console.log("No Schedule");
 };
 
@@ -86,6 +86,7 @@ exports.create = async ctx => {
     return ctx.throw(500, e);
   }
 
+  console.log("schedule length: ", schedules.length);
   if (schedules.length) {
     await Timer.clearAllTimers();
     for (let schedule of schedules) {
@@ -97,6 +98,6 @@ exports.create = async ctx => {
         schedule.schedule
       );
     }
-    console.log("Register Timer Length: ", timerIdsLength());
+    console.log("Register Timer Length: ", Timer.timerIdsLength());
   } else console.log("No Schedule");
 };
