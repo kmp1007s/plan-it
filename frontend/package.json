@@ -21,10 +21,10 @@
     "styled-components": "^5.0.1"
   },
   "scripts": {
-    "start": "cross-env NODE_PATH=src react-scripts start",
-    "build": "cross-env NODE_PATH=src react-scripts build",
-    "test": "cross-env NODE_PATH=src react-scripts test",
-    "eject": "cross-env NODE_PATH=src react-scripts eject"
+    "start": "cross-env NODE_PATH=src react-app-rewired start",
+    "build": "cross-env NODE_PATH=src react-app-rewired build",
+    "test": "cross-env NODE_PATH=src react-app-rewired test",
+    "eject": "cross-env NODE_PATH=src react-app-rewired eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -40,5 +40,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-app-rewired": "^2.1.5"
   }
 }
