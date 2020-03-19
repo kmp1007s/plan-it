@@ -28,7 +28,7 @@ self.addEventListener("push", function(event) {
 
   const payload = event.data ? event.data.text() : "no payload";
   event.waitUntil(
-    self.registration.showNotification("PlanNET[플랜잇]", {
+    self.registration.showNotification("Plan-It", {
       body: payload
     })
   );
